@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import org.zeveon.thaidrivinglicenseexamtest.model.QuestionViewModel
 
 @Composable
-fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, category: String) {
+fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, category: String?) {
     val question by viewModel.currentQuestion.collectAsState()
 
     LaunchedEffect(category) {

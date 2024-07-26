@@ -12,9 +12,14 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
     private val _currentQuestion = MutableStateFlow<Question?>(null)
     val currentQuestion: StateFlow<Question?> get() = _currentQuestion
 
-    fun loadRandomQuestion(category: String) {
+    fun loadRandomQuestion(category: String?) {
         viewModelScope.launch {
-            _currentQuestion.value = repository.getRandomQuestionByCategory(category)
+            val question = if (category == null) {
+                repository.getRandomQuestion()
+            } else {
+                repository.getRandomQuestionByCategory(category)
+            }
+            _currentQuestion.value = question
         }
     }
 }

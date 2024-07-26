@@ -53,7 +53,10 @@ class MainActivity : ComponentActivity() {
         NavHost(navController = navController, startDestination = "main_menu") {
             composable("main_menu") { MainMenuScreen(navController) }
             composable("question_screen/{category}") { backStackEntry ->
-                val category = backStackEntry.arguments?.getString("category") ?: "Automotive Law"
+                var category = backStackEntry.arguments?.getString("category")
+                if (category == "full_test") {
+                    category = null
+                }
                 val viewModel: QuestionViewModel = viewModel(factory = factory)
                 QuestionScreen(navController = navController, viewModel = viewModel, category = category)
             }
