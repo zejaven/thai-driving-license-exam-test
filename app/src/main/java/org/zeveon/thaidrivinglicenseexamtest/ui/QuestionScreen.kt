@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,9 +33,13 @@ import org.zeveon.thaidrivinglicenseexamtest.model.QuestionViewModel
 @Composable
 fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, category: String?) {
     val question by viewModel.currentQuestion.collectAsState()
+    var selectedAnswer by remember { mutableStateOf<String?>(null) }
+    var correctAnswer by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(category) {
         viewModel.loadRandomQuestion(category)
+        selectedAnswer = null
+        correctAnswer = null
     }
 
     Surface(
@@ -45,24 +52,42 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            question?.let {
+            question?.let { q ->
                 Text(
-                    text = it.question,
+                    text = q.question,
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                val options = listOf(it.optionA, it.optionB, it.optionC, it.optionD)
+                val correctAnswerText = when (q.answer) {
+                    "A" -> q.optionA
+                    "B" -> q.optionB
+                    "C" -> q.optionC
+                    "D" -> q.optionD
+                    else -> ""
+                }
+
+                val options = listOf(q.optionA, q.optionB, q.optionC, q.optionD)
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     options.forEach { option ->
+                        val backgroundColor = when {
+                            selectedAnswer != null && selectedAnswer == option && selectedAnswer != correctAnswerText -> Color.Red
+                            selectedAnswer != null && correctAnswerText == option -> Color.Green
+                            else -> MaterialTheme.colorScheme.surface
+                        }
+
                         Box(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .border(1.dp, Color.Black)
-                                .clickable { checkAnswer(option, it.answer) }
-                                .background(MaterialTheme.colorScheme.surface)
+                                .clickable {
+                                    if (selectedAnswer == null) {
+                                        selectedAnswer = option
+                                    }
+                                }
+                                .background(backgroundColor)
                                 .padding(16.dp)
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.CenterStart
@@ -76,13 +101,5 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                 }
             }
         }
-    }
-}
-
-fun checkAnswer(selected: String, correct: String) {
-    if (selected == correct) {
-
-    } else {
-
     }
 }
