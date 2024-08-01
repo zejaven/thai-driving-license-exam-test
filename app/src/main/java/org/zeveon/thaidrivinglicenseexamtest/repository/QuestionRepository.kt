@@ -5,11 +5,11 @@ import org.zeveon.thaidrivinglicenseexamtest.entity.Question
 
 class QuestionRepository(private val questionDao: QuestionDao) {
 
-    suspend fun getRandomQuestion(): Question? {
-        return questionDao.getRandomQuestion()
+    suspend fun getAllQuestions(): List<Question> {
+        return questionDao.getAllQuestions()
     }
 
-    suspend fun getRandomQuestionByCategory(category: String?): Question? {
-        return questionDao.getRandomQuestionByCategory(category)
+    suspend fun getQuestionsByCategory(category: String?): List<Question> {
+        return questionDao.getQuestionsByCategory(category)
     }
 }

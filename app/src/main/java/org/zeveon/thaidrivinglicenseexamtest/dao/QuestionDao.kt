@@ -7,11 +7,11 @@ import org.zeveon.thaidrivinglicenseexamtest.entity.Question
 
 @Dao
 interface QuestionDao {
-    @Query("SELECT * FROM questions ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomQuestion(): Question?
+    @Query("SELECT * FROM questions ORDER BY RANDOM()")
+    suspend fun getAllQuestions(): List<Question>
 
-    @Query("SELECT * FROM questions WHERE category = :category ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomQuestionByCategory(category: String?): Question?
+    @Query("SELECT * FROM questions WHERE category = :category ORDER BY RANDOM()")
+    suspend fun getQuestionsByCategory(category: String?): List<Question>
 
     @Insert
     suspend fun insertAll(vararg questions: Question)

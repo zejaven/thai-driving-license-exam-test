@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         val questionDao = db.questionDao()
 
         lifecycleScope.launch {
-            if (questionDao.getRandomQuestionByCategory("Automotive Law") == null) {
+            if (questionDao.getQuestionsByCategory("Automotive Law").isEmpty()) {
                 val questions = withContext(Dispatchers.IO) {
                     parseCSV(this@MainActivity, "questions.csv")
                 }
