@@ -122,7 +122,7 @@ fun AnswerOption(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable { onSelectAnswer() },
+            .clickable { if (!isSelected) onSelectAnswer() },
         color = when {
             isSelected && isThisOptionSelected && !isCorrect -> Color.Red
             isSelected && isThisOptionCorrect -> Color.Green
