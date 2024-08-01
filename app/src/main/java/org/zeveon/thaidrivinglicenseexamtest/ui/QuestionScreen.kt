@@ -1,6 +1,5 @@
 package org.zeveon.thaidrivinglicenseexamtest.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -25,12 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.zeveon.thaidrivinglicenseexamtest.model.QuestionViewModel
 
-@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, category: String?) {
     val questions by viewModel.currentQuestions.collectAsState()
     val currentQuestionIndex by viewModel.currentQuestionIndex.collectAsState()
     val selectedAnswers by viewModel.selectedAnswers.collectAsState()
+    val incorrectAnswers by viewModel.incorrectAnswers.collectAsState()
 
     LaunchedEffect(category) {
         viewModel.loadQuestionsByCategory(category)
@@ -82,9 +81,7 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
             Spacer(modifier = Modifier.height(16.dp))
             Row {
                 Button(
-                    onClick = {
-                        viewModel.previousQuestion()
-                    },
+                    onClick = { viewModel.previousQuestion() },
                     enabled = currentQuestionIndex > 0,
                     modifier = Modifier.weight(1f)
                 ) {
@@ -92,10 +89,8 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
-                    onClick = {
-                        viewModel.nextQuestion()
-                    },
-                    enabled = currentQuestionIndex < questions.size - 1,
+                    onClick = { viewModel.nextQuestion() },
+                    enabled = currentQuestionIndex < questions.size - 1 || incorrectAnswers.isNotEmpty(),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(text = "Next")
