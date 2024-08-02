@@ -3,6 +3,7 @@ package org.zeveon.thaidrivinglicenseexamtest.ui
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -66,58 +68,67 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                questions.getOrNull(currentQuestionIndex)?.let { question ->
-                    Text(
-                        text = question.question,
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    question.image?.let { imageName ->
-                        if (imageName.isNotBlank()) {
-                            val imagePath = "file:///android_asset/${question.category}/$imageName"
-                            Image(
-                                painter = rememberAsyncImagePainter(imagePath),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp)
-                                    .padding(8.dp)
+                LazyColumn(
+                    modifier = Modifier.weight(1f).padding(bottom = 72.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
+                        questions.getOrNull(currentQuestionIndex)?.let { question ->
+                            Text(
+                                text = question.question,
+                                style = MaterialTheme.typography.headlineLarge,
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Spacer(modifier = Modifier.height(8.dp))
+
+                            question.image?.let { imageName ->
+                                if (imageName.isNotBlank()) {
+                                    val imagePath = "file:///android_asset/${question.category}/$imageName"
+                                    Image(
+                                        painter = rememberAsyncImagePainter(imagePath),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(200.dp)
+                                            .padding(8.dp)
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                            }
+
+                            AnswerOption(
+                                option = "A",
+                                text = question.optionA,
+                                correctAnswer = question.answer,
+                                selectedAnswer = selectedAnswers[currentQuestionIndex],
+                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "A") }
+                            )
+                            AnswerOption(
+                                option = "B",
+                                text = question.optionB,
+                                correctAnswer = question.answer,
+                                selectedAnswer = selectedAnswers[currentQuestionIndex],
+                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "B") }
+                            )
+                            AnswerOption(
+                                option = "C",
+                                text = question.optionC,
+                                correctAnswer = question.answer,
+                                selectedAnswer = selectedAnswers[currentQuestionIndex],
+                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "C") }
+                            )
+                            AnswerOption(
+                                option = "D",
+                                text = question.optionD,
+                                correctAnswer = question.answer,
+                                selectedAnswer = selectedAnswers[currentQuestionIndex],
+                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "D") }
+                            )
                         }
                     }
-
-                    AnswerOption(
-                        option = "A",
-                        text = question.optionA,
-                        correctAnswer = question.answer,
-                        selectedAnswer = selectedAnswers[currentQuestionIndex],
-                        onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "A") }
-                    )
-                    AnswerOption(
-                        option = "B",
-                        text = question.optionB,
-                        correctAnswer = question.answer,
-                        selectedAnswer = selectedAnswers[currentQuestionIndex],
-                        onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "B") }
-                    )
-                    AnswerOption(
-                        option = "C",
-                        text = question.optionC,
-                        correctAnswer = question.answer,
-                        selectedAnswer = selectedAnswers[currentQuestionIndex],
-                        onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "C") }
-                    )
-                    AnswerOption(
-                        option = "D",
-                        text = question.optionD,
-                        correctAnswer = question.answer,
-                        selectedAnswer = selectedAnswers[currentQuestionIndex],
-                        onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "D") }
-                    )
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
             Column(
