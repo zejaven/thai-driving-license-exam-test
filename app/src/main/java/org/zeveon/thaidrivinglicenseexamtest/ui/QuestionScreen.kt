@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.zeveon.thaidrivinglicenseexamtest.model.QuestionViewModel
@@ -43,8 +44,23 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Button(onClick = { navController.navigate("main_menu") }) {
-                    Text(text = "Main Menu")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(onClick = { navController.navigate("main_menu") }) {
+                        Text(text = "Main Menu")
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "${currentQuestionIndex + 1}/${questions.size}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    // TODO: Reset Progress button
+                    Box(modifier = Modifier.weight(1f))
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -86,7 +102,11 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                 }
             }
 
-            Column(modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp)
+            ) {
                 Row {
                     Button(
                         onClick = { viewModel.previousQuestion() },
