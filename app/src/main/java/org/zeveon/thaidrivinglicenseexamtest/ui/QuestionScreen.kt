@@ -1,6 +1,7 @@
 package org.zeveon.thaidrivinglicenseexamtest.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import org.zeveon.thaidrivinglicenseexamtest.model.QuestionViewModel
 
 @Composable
@@ -71,6 +73,22 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+
+                    question.image?.let { imageName ->
+                        if (imageName.isNotBlank()) {
+                            val imagePath = "file:///android_asset/${question.category}/$imageName"
+                            Image(
+                                painter = rememberAsyncImagePainter(imagePath),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .padding(8.dp)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
+
                     AnswerOption(
                         option = "A",
                         text = question.optionA,
