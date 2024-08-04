@@ -58,18 +58,21 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = "${currentQuestionIndex + 1}/${questions.size}",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f)
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    // TODO: Reset Progress button
-                    Box(modifier = Modifier.weight(1f))
+                    Button(onClick = { viewModel.resetProgress(category) }) {
+                        Text(text = "Reset")
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 LazyColumn(
-                    modifier = Modifier.weight(1f).padding(bottom = 72.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(bottom = 72.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     item {
@@ -101,28 +104,44 @@ fun QuestionScreen(navController: NavController, viewModel: QuestionViewModel, c
                                 text = question.optionA,
                                 correctAnswer = question.answer,
                                 selectedAnswer = selectedAnswers[currentQuestionIndex],
-                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "A") }
+                                onSelectAnswer = { viewModel.selectAnswer(
+                                    currentQuestionIndex,
+                                    "A",
+                                    category
+                                ) }
                             )
                             AnswerOption(
                                 option = "B",
                                 text = question.optionB,
                                 correctAnswer = question.answer,
                                 selectedAnswer = selectedAnswers[currentQuestionIndex],
-                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "B") }
+                                onSelectAnswer = { viewModel.selectAnswer(
+                                    currentQuestionIndex,
+                                    "B",
+                                    category
+                                ) }
                             )
                             AnswerOption(
                                 option = "C",
                                 text = question.optionC,
                                 correctAnswer = question.answer,
                                 selectedAnswer = selectedAnswers[currentQuestionIndex],
-                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "C") }
+                                onSelectAnswer = { viewModel.selectAnswer(
+                                    currentQuestionIndex,
+                                    "C",
+                                    category
+                                ) }
                             )
                             AnswerOption(
                                 option = "D",
                                 text = question.optionD,
                                 correctAnswer = question.answer,
                                 selectedAnswer = selectedAnswers[currentQuestionIndex],
-                                onSelectAnswer = { viewModel.selectAnswer(currentQuestionIndex, "D") }
+                                onSelectAnswer = { viewModel.selectAnswer(
+                                    currentQuestionIndex,
+                                    "D",
+                                    category
+                                ) }
                             )
                         }
                     }

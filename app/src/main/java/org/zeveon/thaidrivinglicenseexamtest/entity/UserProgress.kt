@@ -8,5 +8,7 @@ class UserProgress(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val questionId: Int,
-    val correctAnswered: Boolean
+    val category: String?,
+    val selectedAnswer: String?,
+    val isCorrect: Boolean?
 )

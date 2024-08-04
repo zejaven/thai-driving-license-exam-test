@@ -13,6 +13,9 @@ interface QuestionDao {
     @Query("SELECT * FROM questions WHERE category = :category ORDER BY RANDOM()")
     suspend fun getQuestionsByCategory(category: String?): List<Question>
 
+    @Query("SELECT * FROM questions WHERE id IN (:ids)")
+    suspend fun getQuestionsByIds(ids: List<Int>): List<Question>
+
     @Insert
     suspend fun insertAll(vararg questions: Question)
 }

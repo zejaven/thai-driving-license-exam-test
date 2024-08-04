@@ -2,17 +2,24 @@ package org.zeveon.thaidrivinglicenseexamtest.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import org.zeveon.thaidrivinglicenseexamtest.entity.UserProgress
 
 @Dao
 interface UserProgressDao {
-    @Query("SELECT * FROM user_progress")
-    suspend fun getAll(): List<UserProgress>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertProgress(userProgress: UserProgress)
 
-    @Query("SELECT * FROM user_progress WHERE correctAnswered = 0 ORDER BY RANDOM() LIMIT 1")
-    suspend fun getRandomWrongAnswer(): UserProgress?
+    @Query("SELECT * FROM user_progress WHERE category = :category")
+    suspend fun getProgressByCategory(category: String?): List<UserProgress>
 
-    @Insert
-    suspend fun insertAll(userProgress: UserProgress)
+    @Query("SELECT * FROM user_progress WHERE category IS NULL")
+    suspend fun getFullTestProgress(): List<UserProgress>
+
+    @Query("DELETE FROM user_progress WHERE category = :category")
+    suspend fun clearProgressByCategory(category: String?)
+
+    @Query("DELETE FROM user_progress WHERE category IS NULL")
+    suspend fun clearFullTestProgress()
 }
