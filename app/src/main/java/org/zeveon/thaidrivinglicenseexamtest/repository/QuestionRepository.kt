@@ -41,4 +41,8 @@ class QuestionRepository(
             userProgressDao.clearProgressByCategory(category)
         }
     }
+
+    suspend fun getRandomQuestions(limit: Int): List<Question> {
+        return questionDao.getAllQuestions().shuffled().take(limit)
+    }
 }

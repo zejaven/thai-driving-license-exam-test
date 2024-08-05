@@ -16,8 +16,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.zeveon.thaidrivinglicenseexamtest.factory.QuestionViewModelFactory
 import org.zeveon.thaidrivinglicenseexamtest.model.QuestionViewModel
+import org.zeveon.thaidrivinglicenseexamtest.ui.LearningScreen
 import org.zeveon.thaidrivinglicenseexamtest.ui.MainMenuScreen
 import org.zeveon.thaidrivinglicenseexamtest.ui.QuestionScreen
+import org.zeveon.thaidrivinglicenseexamtest.ui.TestResultScreen
+import org.zeveon.thaidrivinglicenseexamtest.ui.TimedQuestionScreen
 import org.zeveon.thaidrivinglicenseexamtest.ui.theme.ThaiDrivingLicenseExamTestTheme
 import org.zeveon.thaidrivinglicenseexamtest.util.parseCSV
 
@@ -49,16 +52,26 @@ class MainActivity : ComponentActivity() {
         val application = (navController.context.applicationContext as ThaiDrivingLicenseExamTestApp)
         val repository = application.repository
         val factory = QuestionViewModelFactory(repository)
+        val viewModel: QuestionViewModel = viewModel(factory = factory)
 
         NavHost(navController = navController, startDestination = "main_menu") {
             composable("main_menu") { MainMenuScreen(navController) }
+            composable("learning") { LearningScreen(navController) }
+            composable("mock_test") {
+                TimedQuestionScreen(navController, viewModel)
+            }
             composable("question_screen/{category}") { backStackEntry ->
                 var category = backStackEntry.arguments?.getString("category")
                 if (category == "full_test") {
                     category = null
                 }
-                val viewModel: QuestionViewModel = viewModel(factory = factory)
                 QuestionScreen(navController = navController, viewModel = viewModel, category = category)
+            }
+            composable("test_result/{questionNumber}/{correctAnswers}/{timePassed}") { backStackEntry ->
+                val totalQuestions = backStackEntry.arguments?.getString("questionNumber")?.toInt() ?: 0
+                val correctAnswers = backStackEntry.arguments?.getString("correctAnswers")?.toInt() ?: 0
+                val timePassedFormatted = backStackEntry.arguments?.getString("timePassed") ?: "00:00"
+                TestResultScreen(navController, totalQuestions, correctAnswers, timePassedFormatted)
             }
         }
     }

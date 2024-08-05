@@ -59,6 +59,8 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
             } else {
                 _currentQuestions.value = allQuestions
                 _currentQuestionIndex.value = 0
+                _selectedAnswers.value = mutableMapOf()
+                _incorrectAnswers.value = mutableSetOf()
             }
         }
     }
@@ -90,6 +92,12 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
         saveProgress(questionIndex, answer, category)
     }
 
+    fun selectAnswer(questionIndex: Int, answer: String) {
+        val updatedAnswers = _selectedAnswers.value.toMutableMap()
+        updatedAnswers[questionIndex] = answer
+        _selectedAnswers.value = updatedAnswers
+    }
+
     private fun saveProgress(questionIndex: Int, answer: String, category: String?) {
         viewModelScope.launch {
             val question = _currentQuestions.value[questionIndex]
@@ -116,5 +124,19 @@ class QuestionViewModel(private val repository: QuestionRepository) : ViewModel(
             _incorrectAnswers.value = mutableSetOf()
             loadQuestionsByCategory(category)
         }
+    }
+
+    fun loadRandomQuestions(questionNumber: Int) {
+        viewModelScope.launch {
+            val randomQuestions = repository.getRandomQuestions(questionNumber)
+            _currentQuestions.value = randomQuestions
+            _currentQuestionIndex.value = 0
+            _selectedAnswers.value = mutableMapOf()
+        }
+    }
+
+    fun resetProgress() {
+        _selectedAnswers.value = mutableMapOf()
+        _incorrectAnswers.value = mutableSetOf()
     }
 }
