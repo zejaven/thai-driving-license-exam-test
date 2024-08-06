@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import org.zeveon.thaidrivinglicenseexamtest.dao.QuestionDao
 import org.zeveon.thaidrivinglicenseexamtest.dao.UserProgressDao
 import org.zeveon.thaidrivinglicenseexamtest.database.MIGRATION_1_2
+import org.zeveon.thaidrivinglicenseexamtest.database.MIGRATION_2_3
 import org.zeveon.thaidrivinglicenseexamtest.entity.Question
 import org.zeveon.thaidrivinglicenseexamtest.entity.UserProgress
 
-@Database(entities = [Question::class, UserProgress::class], version = 2)
+@Database(entities = [Question::class, UserProgress::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun questionDao(): QuestionDao
     abstract fun userProgressDao(): UserProgressDao
@@ -25,8 +26,10 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context, AppDatabase::class.java, "driving-license-questions")
-                .addMigrations(MIGRATION_1_2)
-                .fallbackToDestructiveMigration()
+                .addMigrations(
+                    MIGRATION_1_2,
+                    MIGRATION_2_3
+                ).fallbackToDestructiveMigration()
                 .build()
     }
 }
